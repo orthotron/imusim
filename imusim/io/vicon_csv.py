@@ -71,3 +71,6 @@ def loadViconCSVFile(filename):
     # Set time and data attributes for each joint for the marker capture object
     return capture
     # Return the capture object that can then be splined and simulated
+
+def get_jointnames(index):
+    return jointNames[index]
