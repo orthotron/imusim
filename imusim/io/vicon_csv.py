@@ -7,6 +7,7 @@ from imusim.capture.marker import MarkerCapture, Marker3DOF
 import numpy as np
 import csv
 
+jointNames = []
 def loadViconCSVFile(filename):
     """
     Load 3DOF marker data from a Vicon CSV file.
@@ -18,7 +19,6 @@ def loadViconCSVFile(filename):
 
     data = []
     timestamps = []
-    jointNames = []
     raw = []
     # A few empty lists
     with open(filename) as csvfile:
