@@ -26,7 +26,7 @@ def loadViconCSVFile(filename):
         # Read in the file
         for row in reader:
             raw.append(row)
-        # Move the file contents to out buffer list
+        # Move the file contents to our buffer list
         captureRate = int(raw[1][0])
         # Capture rate is in the first column of the second row of the CSV
         names = raw[2]
@@ -72,5 +72,5 @@ def loadViconCSVFile(filename):
     return capture
     # Return the capture object that can then be splined and simulated
 
-def get_jointnames(index):
+def get_joint(index):
     return jointNames[index]
