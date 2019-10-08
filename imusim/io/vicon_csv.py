@@ -62,6 +62,7 @@ def loadViconCSVFile(filename):
     capture.frameCount = len(timestamps)
     capture.frameRate = captureRate
     capture.framePeriod = 1.0/captureRate
+    capture.names = jointNames
     # Create the marker capture object and set necessary attributes
     
     for i, name in enumerate(jointNames):
