@@ -7,7 +7,30 @@ from imusim.capture.marker import MarkerCapture, Marker3DOF
 import numpy as np
 import csv
 
+data = []
+timestamps = []
 jointNames = []
+raw = []
+
+def read_data(filename):
+    with open(filename) as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            raw.append(row)
+    return raw
+
+def get_joints(raw):
+    names = raw[2]
+    return names
+
+def process_names(names):
+    for i, name in enumerate(names):
+            if i%3 == 2:
+                idx = name.rfind(':')
+                name = name[idx+1:]
+                jointNames.append(name)
+    return jointNames
+
 def loadViconCSVFile(filename):
     """
     Load 3DOF marker data from a Vicon CSV file.
@@ -17,41 +40,68 @@ def loadViconCSVFile(filename):
     @return: A L{MarkerCapture} object.
     """
 
-    data = []
-    timestamps = []
-    raw = []
+    # data = []
+    # timestamps = []
+    # jointNames = []
+    # raw = []
+    raw = read_data(filename)
     # A few empty lists
-    with open(filename) as csvfile:
-        reader = csv.reader(csvfile)
-        # Read in the file
-        for row in reader:
-            raw.append(row)
-        # Move the file contents to our buffer list
-        captureRate = int(raw[1][0])
+    # with open(filename) as csvfile:
+    #     reader = csv.reader(csvfile)
+    #     # Read in the file
+    #     for row in reader:
+    #         raw.append(row)
+        # Move the file contents to out buffer list
+
+        # captureRate = int(raw[1][0])
+    captureRate = int(raw[1][0])
+
         # Capture rate is in the first column of the second row of the CSV
-        names = raw[2]
+
+        # names = raw[2]
+    names = get_joints(raw)
+
         # The joint names are located in the third row
-        rows = raw[5:-1]
+
+        # rows = raw[5:-1]
+    rows = raw[5:-1]
         # Read in data starting from the 6th row of the CSV
 
-        for i, name in enumerate(names):
-            if i%3 == 2:
-                idx = name.rfind(':')
-                name = name[idx+1:]
-                jointNames.append(name)
+        # for i, name in enumerate(names):
+        #     if i%3 == 2:
+        #         idx = name.rfind(':')
+        #         name = name[idx+1:]
+        #         jointNames.append(name)
+    jointNames = process_names(names)
+
+        #     # The joint names begin at index 2 of the names list and appear at every third index after that.
+        #     # The subject name and marker name are divided by a :
+        # # Create list of jointnames from label
+        # print("The available markers are ", jointNames)
+        # # Print the list of marker names to console so users know what they can choose to simulate.
+        # for row in rows:
+        #     # print(row)
+        #     timestamps.append(float(row[0]))
+        #     # Set timestamp as first element of row
+        #     newData = [float(element) for element in row[2:]]
+        #     newData = np.split(np.array(newData), len(jointNames))
+        #     data.append(newData)
+        #     # Split data into x-y-z tuples to be processed by the marker capture object
+
             # The joint names begin at index 2 of the names list and appear at every third index after that.
-            # The subject name and marker name are divided by a :
-        # Create list of jointnames from label
-        print("The available markers are ", jointNames)
-        # Print the list of marker names to console so users know what they can choose to simulate.
-        for row in rows:
-            # print(row)
-            timestamps.append(float(row[0]))
-            # Set timestamp as first element of row
-            newData = [float(element) for element in row[2:]]
-            newData = np.split(np.array(newData), len(jointNames))
-            data.append(newData)
-            # Split data into x-y-z tuples to be processed by the marker capture object
+        # The subject name and marker name are divided by a :
+    # Create list of jointnames from label
+    print("The available markers are ", jointNames)
+    # Print the list of marker names to console so users know what they can choose to simulate.
+    for row in rows:
+        # print(row)
+        timestamps.append(float(row[0]))
+        # Set timestamp as first element of row
+        newData = [float(element) for element in row[2:]]
+        newData = np.split(np.array(newData), len(jointNames))
+        data.append(newData)
+        # Split data into x-y-z tuples to be processed by the marker capture object
+
 
     timestamps = np.array(timestamps)
     data = np.array(data)/1000.0
