@@ -7,8 +7,8 @@ from imusim.capture.marker import MarkerCapture, Marker3DOF
 import numpy as np
 import csv
 
-# jointNames = []
-# raw = []
+jointNames = []
+raw = []
 
 def read_data(filename):
     with open(filename) as csvfile:
