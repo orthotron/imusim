@@ -98,6 +98,9 @@ def loadViconCSVFile(filename):
         timestamps.append(float(row[0]))
         # Set timestamp as first element of row
         newData = [float(element) for element in row[2:]]
+        print(newData)
+        print(type(jointNames))
+        print(len(jointNames))
         newData = np.split(np.array(newData), len(jointNames))
         data.append(newData)
         # Split data into x-y-z tuples to be processed by the marker capture object
