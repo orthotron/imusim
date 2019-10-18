@@ -27,6 +27,8 @@ def process_names(names):
                 idx = name.rfind(':')
                 name = name[idx+1:]
                 jointNames.append(name)
+    if (jointNames[-1] == ''):
+        jointNames.pop()
     return jointNames
 
 def loadViconCSVFile(filename):
