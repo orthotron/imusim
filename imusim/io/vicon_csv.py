@@ -102,7 +102,7 @@ def loadViconCSVFile(filename):
         print(type(jointNames))
         print(len(jointNames))
         # newData = np.split(np.array(newData), len(jointNames))
-        newData = np.split(np.array(newData), jointNames)
+        newData = np.split(np.array(newData), len(jointNames))
         data.append(newData)
         # Split data into x-y-z tuples to be processed by the marker capture object
 
