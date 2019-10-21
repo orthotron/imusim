@@ -39,7 +39,6 @@ def loadViconCSVFile(filename):
 
     @return: A L{MarkerCapture} object.
     """
-    print("Empty list declarations:")
     data = []
     timestamps = []
     # data = []
@@ -100,9 +99,6 @@ def loadViconCSVFile(filename):
         timestamps.append(float(row[0]))
         # Set timestamp as first element of row
         newData = [float(element) for element in row[2:]]
-        print(newData)
-        print(type(jointNames))
-        print(len(jointNames))
         # newData = np.split(np.array(newData), len(jointNames))
         newData = np.split(np.array(newData), len(jointNames))
         data.append(newData)
