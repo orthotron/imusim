@@ -35,6 +35,7 @@ from imusim.simulation.base import Simulation
 from imusim.testing.vectors import assert_vectors_correlated
 import numpy as np
 from os import path
+import matplotlib.pyplot as plt
 
 def testAgainstReality():
     print("Begin testing.")
@@ -153,12 +154,21 @@ def testAgainstReality():
         distortIMUs.append(BasicIMUBehaviour(platform, dt))
     print("Made it 9")
     sim.run(model.endTime)
+    i = 1
     for imu in range(3):
         for sensorName in ['accelerometer', 'magnetometer', 'gyroscope']:
             sim = getattr(distortIMUs[imu].imu,sensorName).rawMeasurements
             print("Made it 10")
             true = imuData[imu].sensorData(sensorName)(sim.timestamps + model.startTime)
+            if (sensorName == 'accelerometer'):
+                plt.figure(i)
+                plt.plot(true)
+                plt.title = i
+                plt.xlabel("Time (s)")
+                plt.ylabel("Acceleration (m/s^2)")
+                plt.legend()
+                plt.show()
+                i += 1
             # yield assert_vectors_correlated, sim.values, true, 0.8
-            yield assert_vectors_correlated(sim.values, true, 0.9999999)
             # return assert_vectors_correlated(sim.values, True, 0.8)
     
