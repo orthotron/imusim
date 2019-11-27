@@ -42,3 +42,7 @@ def assert_vectors_correlated(actual, desired, targetCorrelation=0.95):
     assert np.all(correlations > targetCorrelation), "Vectors are not " \
     "sufficiently correlated. \nCorrelation values: %s\nTarget %.2f"\
         %(correlations, targetCorrelation)
+
+    if np.all(correlations > targetCorrelation):
+        return True
+    return False
