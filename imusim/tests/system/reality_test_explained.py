@@ -214,7 +214,8 @@ def testAgainstReality():
     dt = 1/capture3D.sampled.frameRate
     '''
     Iterate through imuJointTrajectories, create an IdealIMU object for each trajectory, 
-    set BasicIMUBehaviour for each IMU using dt, and add the BasicIMUBehaviour object tothe distortIMUs list.
+    set BasicIMUBehaviour for each IMU using dt, and add the BasicIMUBehaviour object to 
+    the distortIMUs list.
     '''
     for traj in imuJointTrajectories:
         platform = IdealIMU(sim, traj)
@@ -225,17 +226,35 @@ def testAgainstReality():
     Iterate through a list of 3 IMUs. For each of the 3 sensors of each IMU, 
     set a TimeSeries (sim) and a list of 3 lists (true).
     '''
+    sensors = ['accelerometer', 'magnetometer', 'gyroscope']
+    ylabels = ["Acceleration(m/s^2)", "Rotational Acceleration(rad/s^2)", "Magnetic Field Strength(mT)"]
     for imu in range(3):
-        for sensorName in ['accelerometer', 'magnetometer', 'gyroscope']:
+        for sensorName in sensors:
+            # Create an empty list of 3 lists to store the calibrated sim values.
+            sim_cal = [[], [], []]
             sim = getattr(distortIMUs[imu].imu,sensorName).rawMeasurements
             true = imuData[imu].sensorData(sensorName)(sim.timestamps + model.startTime)
-            # if (sensorName == 'accelerometer'):
-            #     plt.figure(i)
-            #     plt.plot(true)
-            #     plt.title = i
-            #     plt.xlabel("Time (s)")
-            #     plt.ylabel("Acceleration (m/s^2)")
-            #     plt.legend()
-            #     plt.show()
+            for i in range(3):
+                for value in sim.values[i-1]:
+                    if sensorName == "accelerometer":
+                        sim_cal[i-1].append(value/10)
+                    elif sensorName == "magnetometer":
+                        sim_cal[i-1].append(value/2)
+                    else:
+                        sim_cal[i-1].append(value)
+            plt.figure()
+            plt.plot(sim.timestamps, sim_cal[0], 'c-', label = 'sim x')
+            plt.plot(sim.timestamps, sim_cal[1], 'm-', label = 'sim y')
+            plt.plot(sim.timestamps, sim_cal[2], 'y-', label = 'sim z')
+            plt.plot(sim.timestamps, true[0], 'r-', label = 'true x')
+            plt.plot(sim.timestamps, true[1], 'g-', label = 'true y')
+            plt.plot(sim.timestamps, true[2], 'b-', label = 'true z')
+            plt.title = sensorName
+            plt.xlabel("Time (s)")
+            plt.ylabel(ylabels[sensors.index(sensorName)])
+            plt.legend()
+            plt.savefig(sensorName+"_"+str(imu+1)+".pdf", bbox_inches='tight')
             # yield assert_vectors_correlated, sim.values, true, 0.8
-    return assert_vectors_correlated(sim.values, True, 0.8)
+    return assert_vectors_correlated(sim.values, true, 0.8)
+
+testAgainstReality()
