@@ -195,7 +195,7 @@ def testAgainstReality():
     dev = values - np.median(values[:,valid],axis=1).reshape((3,1))
     # int step is equal to the number of valid columns in values divided by magSamples.
     step = np.shape(values[:,valid])[1] // magSamples
-    # Create 2 new lists of lists from positions and values usingt he valid values and a step of 30.
+    # Create 2 new lists of lists from positions and values using the valid values and a step of 30.
     posSamples = positions[:,valid][:,::step]
     valSamples = values[:,valid][:,::step]
     # Create an instance of Environement and configure its magneticField using posSamples and valSamples.
