@@ -35,10 +35,14 @@ def assert_vectors_correlated(actual, desired, targetCorrelation=0.95):
     @param targetCorrelation: Minimum correlation to accept.
     """
     correlationMatrix = np.corrcoef(actual, desired)
-    s = correlationMatrix.shape[0] / 2
+    s = correlationMatrix.shape[0] // 2
     correlationMatrix = correlationMatrix[s:, :s]
     correlations = np.diag(correlationMatrix)
 
     assert np.all(correlations > targetCorrelation), "Vectors are not " \
     "sufficiently correlated. \nCorrelation values: %s\nTarget %.2f"\
         %(correlations, targetCorrelation)
+
+    if np.all(correlations > targetCorrelation):
+        return True
+    return False
